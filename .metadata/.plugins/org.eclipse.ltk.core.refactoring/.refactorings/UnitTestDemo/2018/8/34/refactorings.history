@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Extract method &apos;private void displayMatrix(int [] [] matrix)&apos; from &apos;com.ck.UnitTestDemo.Program.matrixMove()&apos; to &apos;com.ck.UnitTestDemo.Program&apos;&#x0D;&#x0A;- Original project: &apos;UnitTestDemo&apos;&#x0D;&#x0A;- Method name: &apos;displayMatrix&apos;&#x0D;&#x0A;- Destination type: &apos;com.ck.UnitTestDemo.Program&apos;&#x0D;&#x0A;- Declared visibility: &apos;private&apos;" comments="false" description="Extract method &apos;displayMatrix&apos;" destination="0" exceptions="false" flags="786434" id="org.eclipse.jdt.ui.extract.method" input="/src\/main\/java&lt;com.ck.UnitTestDemo{Program.java" name="displayMatrix" replace="false" selection="1977 161" stamp="1534649513650" version="1.0" visibility="2"/>
+</session>

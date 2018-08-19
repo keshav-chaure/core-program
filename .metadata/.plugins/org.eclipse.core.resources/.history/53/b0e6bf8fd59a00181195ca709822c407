@@ -1,0 +1,280 @@
+package com.workscape.vehicleidentifier;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
+/**
+ * Hello world!
+ * 
+ */
+public class VehicleIdentifier {
+	
+	Set<Vehicle> vehicles=new HashSet();
+	Vehicle v;
+	Set<Set<Wheel>> wheels=new HashSet();
+	Set<Wheel> wlsub=new HashSet();
+	Wheel w;
+	int cnt;
+	Wheel wl=new Wheel();
+	 
+	public static void main(String args[]) throws IOException
+	 {
+		
+	  VehicleIdentifier vi=new VehicleIdentifier();
+	  //System.out.println("Reading file from resources folder");
+	  System.out.println("-----------------------------");	 
+	  vi.readXMLFile("vehicles.xml");
+//	  vi.readFile("vehicles.xml");
+	 // vi.printReport();
+//	  System.out.println("wheels --"+vi.wheels);
+//	  System.out.println("vehicles --"+vi.vehicles);
+//	  for (Vehicle v : vi.vehicles) {
+//		//System.out.println(v.getVehicleID());
+//		//System.out.println(v.getVehicleID());
+//		Set<Wheel> wls=v.getWheels();
+//		System.out.println("--"+wls);
+//		for (Wheel wheel : wls) {
+//			
+//			System.out.println("--"+wheel);
+//		}
+//	}
+	  
+	  for (Set<Wheel> w : vi.wheels) {
+		  for (Wheel wheel : w) {
+			  System.out.println("$$P "+wheel.getPosition());
+				System.out.println("$$M "+wheel.getMaterial());	
+		}
+		
+	}
+	  
+	  System.out.println("-----------------------------");
+	 }
+	
+	 
+
+	private void readXMLFile(String fileName) {
+		// TODO Auto-generated method stub
+		try {
+
+			SAXParserFactory factory = SAXParserFactory.newInstance();
+			SAXParser saxParser = factory.newSAXParser();
+
+			DefaultHandler handler = new DefaultHandler() {
+
+			boolean bfname = false;
+			boolean blname = false;
+			boolean bnname = false;
+			boolean bsalary = false;
+
+			public void startElement(String uri, String localName,String qName, 
+		                Attributes attributes) throws SAXException {
+
+				System.out.println("Start Element :" + qName);
+				System.out.println("Start Element :" + uri);
+				System.out.println("Start Element :" + localName);
+				System.out.println("Start Element :" + attribute);
+
+				if (qName.equalsIgnoreCase("id")) {
+					bfname = true;
+				}
+
+				if (qName.equalsIgnoreCase("LASTNAME")) {
+					blname = true;
+				}
+
+				if (qName.equalsIgnoreCase("NICKNAME")) {
+					bnname = true;
+				}
+
+				if (qName.equalsIgnoreCase("SALARY")) {
+					bsalary = true;
+				}
+
+			}
+
+			public void endElement(String uri, String localName,
+				String qName) throws SAXException {
+
+				System.out.println("End Element :" + qName);
+
+			}
+
+			public void characters(char ch[], int start, int length) throws SAXException {
+
+				if (bfname) {
+					System.out.println("First Name : " + new String(ch, start, length));
+					bfname = false;
+				}
+
+				if (blname) {
+					System.out.println("Last Name : " + new String(ch, start, length));
+					blname = false;
+				}
+
+				if (bnname) {
+					System.out.println("Nick Name : " + new String(ch, start, length));
+					bnname = false;
+				}
+
+				if (bsalary) {
+					System.out.println("Salary : " + new String(ch, start, length));
+					bsalary = false;
+				}
+
+			}
+
+		     };
+		     ClassLoader classLoader = this.getClass().getClassLoader();	   
+			   File configFile=new File(classLoader.getResource(fileName).getFile());	
+		       saxParser.parse(configFile, handler);
+		 
+		     } catch (Exception e) {
+		       e.printStackTrace();
+		     }
+		  
+	   }
+		
+
+
+		
+	
+
+
+
+	private void printReport() {
+		// TODO Auto-generated method stub
+		
+		for (Vehicle v  : vehicles) {
+			System.out.println(v.getVehicleID());
+			System.out.println(v.getFrameMaterial());
+			System.out.println(v.getPowerTrain());			
+			Set<Wheel> w=v.getWheels();
+			for (Wheel wheel : w) {
+				System.out.println(wheel.getMaterial());
+				System.out.println(wheel.getPosition());
+			}
+			
+		}
+		
+	}
+
+
+
+	public  void readFile(String fileName) throws IOException
+	 {
+	  FileInputStream inputStream=null;	  
+	  try {
+	   
+	   ClassLoader classLoader = this.getClass().getClassLoader();	   
+	   File configFile=new File(classLoader.getResource(fileName).getFile());	  
+	   DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+	   DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+	   Document doc = dBuilder.parse(configFile);		 
+		doc.getDocumentElement().normalize();	 
+		NodeList root=doc.getElementsByTagName("vehicle");
+		 for (int i=0;i< root.getLength() ;i++){
+			 cnt=0;
+			 //w=new Wheel();
+			 wheels=new HashSet();
+			 v=new Vehicle();
+			 Node n=root.item(i);				 
+			 getNodeValue(n);
+			// System.out.println("===="+w.getMaterial());
+			 //wheels.add(w);
+			// Set s=v.getWheels();
+			// s.add(wheels);
+			// vehicles.add(v);		
+			//  wlsub.addAll(wheels);
+		 }
+	 
+	  }  catch (Exception e) {
+			e.printStackTrace();
+	    }
+	  finally {
+	   //inputStream.close();
+	  }	  
+	}
+	
+	public  void getNodeValue(Node node) {
+		String value=null;
+		//System.out.println("node lenght= "+ node.getChildNodes().getLength()+",value = "+node.getNodeValue()+",name = "+node.getNodeName());
+		if(node.hasChildNodes() && node.getChildNodes().getLength() > 1) {
+			//System.out.println("node lenght= "+ node.getChildNodes().getLength()+",value = "+node.getNodeValue()+",name = "+node.getNodeName());
+			if(node.getNodeName().equalsIgnoreCase("wheels")){
+				
+				
+			}
+			if(node.getNodeName().equalsIgnoreCase("wheel")){
+				cnt++;
+				
+//				Wheel wl=new Wheel();
+//				wl.setMaterial(node.getFirstChild().getNodeValue());
+//				wl.setMaterial(node.getFirstChild().getNodeValue());
+//				wheels.add(wl);
+			
+			}
+				
+			NodeList tempList=node.getChildNodes();
+			for(int i=0;i<tempList.getLength(); i++) {
+				Node tempNode=tempList.item(i);
+				getNodeValue(tempNode);
+			}
+		}else if(node.getChildNodes().getLength() == 1){
+//			System.out.println("wheels : "+node.getLastChild().getNodeValue());
+		 	System.out.println("node lenght= "+ node.getChildNodes().getLength()+",value = "+node.getFirstChild().getNodeValue()+",name = "+node.getNodeName()+",parent name = "+node.getParentNode().getNodeName()+",parent p name = "+node.getParentNode().getParentNode().getNodeName()+" -"+node.getNodeName());
+			//System.out.println("cnt "+cnt);
+		 	if(node.getParentNode().getParentNode().getNodeName().equalsIgnoreCase("wheels")){
+		 		wlsub=new HashSet();
+			if(node.getParentNode().getNodeName().equalsIgnoreCase("wheel")){
+				
+				wl=new Wheel();
+					if(node.getNodeName().equalsIgnoreCase("material") && node.getNodeName().equalsIgnoreCase("material")){
+						wl.setMaterial(node.getLastChild().getNodeValue());
+						System.out.println("material "+node.getFirstChild().getNodeValue());
+					}else if(node.getNodeName().equalsIgnoreCase("position") && node.getNodeName().equalsIgnoreCase("position")){
+						wl.setPosition(node.getFirstChild().getNodeValue());	
+						System.out.println("position "+node.getFirstChild().getNodeValue());
+					}
+					wlsub.add(wl);	 
+			}
+			wheels.add(wlsub);
+		 	}
+				if(node.getNodeType()==3 ) {			
+				if(node.getParentNode().getNodeName().equalsIgnoreCase("id")) {
+					v.setVehicleID( node.getFirstChild().getNodeValue());
+				}else if(node.getParentNode().getNodeName().equalsIgnoreCase("material")) {
+					v.setFrameMaterial(node.getFirstChild().getNodeValue());
+				}else if(node.getParentNode().getNodeName().equalsIgnoreCase("position")) {
+					
+				}  
+		//	System.out.println( "parnet Name :"+ node.getParentNode().getNodeName().toString() + "    node name : "+ node.getNodeValue() +", value :" +(node.getTextContent()));				
+			}else if(node.getNodeType()==1) {
+				if(node.getParentNode().getNodeName().equalsIgnoreCase("powertrain")) {
+					v.setPowerTrain(node.getFirstChild().getNodeName());
+				  } 
+			 	 
+			}
+		 
+		}
+		 
+	}
+
+	 
+	
+}

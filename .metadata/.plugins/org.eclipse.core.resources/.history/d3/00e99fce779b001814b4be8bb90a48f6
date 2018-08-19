@@ -1,0 +1,47 @@
+package com.workscape.vehicleidentifier;
+public class Vehicle {
+	
+	String vehicleID;
+	String frameMaterial;
+	Set<Wheel> leftRear;
+	String powerTrain;
+	
+	public String getVehicleID() {
+		return vehicleID;
+	}
+
+	public void setVehicleID(String vehicleID) {
+		this.vehicleID = vehicleID;
+	}
+
+	public String getFrameMaterial() {
+		return frameMaterial;
+	}
+
+	public void setFrameMaterial(String frameMaterial) {
+		this.frameMaterial = frameMaterial;
+	}
+
+	public Set<Wheel> getLeftRear() {
+		return leftRear;
+	}
+
+	public void setLeftRear(Set<Wheel> leftRear) {
+		this.leftRear = leftRear;
+	}
+
+	public String getPowerTrain() {
+		return powerTrain;
+	}
+
+	public void setPowerTrain(String powerTrain) {
+		this.powerTrain = powerTrain;
+	}
+
+	
+	
+	 
+
+	
+
+}

@@ -1,0 +1,50 @@
+package com.workscape.vehicleidentifier;
+
+import java.util.Set;
+
+public class Vehicle {
+	
+	String vehicleID;
+	String frameMaterial;
+	Set<Wheel> wheels;
+	String powerTrain;
+	
+	public String getVehicleID() {
+		return vehicleID;
+	}
+
+	public void setVehicleID(String vehicleID) {
+		this.vehicleID = vehicleID;
+	}
+
+	public String getFrameMaterial() {
+		return frameMaterial;
+	}
+
+	public void setFrameMaterial(String frameMaterial) {
+		this.frameMaterial = frameMaterial;
+	}
+
+	public Set<Wheel> getWheels() {
+		return wheels;
+	}
+
+	public void setWheels(Set<Wheel> wheels) {
+		this.wheels = wheels;
+	}
+
+	public String getPowerTrain() {
+		return powerTrain;
+	}
+
+	public void setPowerTrain(String powerTrain) {
+		this.powerTrain = powerTrain;
+	}
+
+	
+	
+	 
+
+	
+
+}

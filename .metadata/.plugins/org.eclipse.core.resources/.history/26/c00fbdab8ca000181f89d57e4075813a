@@ -1,0 +1,5 @@
+package org.kc.aws.lambda.demo;
+
+public class LambdaFunctionHandlerTemp {
+
+}

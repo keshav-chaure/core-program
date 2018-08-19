@@ -1,0 +1,180 @@
+package com.workscape.vehicleidentifier;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
+/**
+ * Hello world!
+ * 
+ */
+public class VehicleIdentifier {
+	
+	Set<Vehicle> vehicles=new HashSet();
+	Vehicle v;
+	Set<Set<Wheel>> wheels=new HashSet();
+	Set<Wheel> wlsub;
+	Wheel w;
+	int cnt;
+	Wheel wl=new Wheel();
+	String tmpValue;
+
+	 
+	public static void main(String args[]) throws IOException
+	 {
+		
+	  VehicleIdentifier vi=new VehicleIdentifier();
+	  //System.out.println("Reading file from resources folder");
+	  System.out.println("-----------------------------");	 
+	  vi.readXMLFile("vehicles.xml");
+//	  vi.readFile("vehicles.xml");
+	 // vi.printReport();
+//	  System.out.println("wheels --"+vi.wheels);
+//	  System.out.println("vehicles --"+vi.vehicles);
+//	  for (Vehicle v : vi.vehicles) {
+//		//System.out.println(v.getVehicleID());
+//		//System.out.println(v.getVehicleID());
+//		Set<Wheel> wls=v.getWheels();
+//		System.out.println("--"+wls);
+//		for (Wheel wheel : wls) {
+//			
+//			System.out.println("--"+wheel);
+//		}
+//	}
+	  for (Vehicle v : vi.vehicles) {
+		System.out.println("id : "+v.getVehicleID());
+		System.out.println("frameMaterial : "+v.getFrameMaterial());
+		System.out.println("wh "+v.getWheels());
+		for(Wheel w:v.getWheels()){
+			System.out.println("wheel position  : "+w.getPosition());
+		}
+	  }
+	  
+	  System.out.println("-----------------------------");
+	 }
+	
+	 
+
+	private void readXMLFile(String fileName) {
+			try {
+
+			SAXParserFactory factory = SAXParserFactory.newInstance();
+			SAXParser saxParser = factory.newSAXParser();
+
+			DefaultHandler handler = new DefaultHandler() {
+
+			boolean id = false;
+			boolean material = false;
+			boolean positionWheel = false;
+			boolean materialWheel = false;
+			boolean powertrain = false;
+
+			public void startElement(String uri, String localName,String qName, 
+		                Attributes attributes) throws SAXException {
+
+			
+				if (qName.equalsIgnoreCase("vehicle")) {
+					v=new Vehicle();
+				}
+				if (qName.equalsIgnoreCase("wheels")) {
+					System.out.println("wheels ");
+					wlsub=new HashSet();
+				}				
+				if (qName.equalsIgnoreCase("wheel")) {
+					System.out.println("wheel");
+					w=new Wheel();
+				
+				}
+			}
+
+			public void endElement(String uri, String localName,
+				String qName) throws SAXException {
+				//System.out.println("End Element :" + qName);
+				
+				if(qName.equalsIgnoreCase("vehicle")){
+					vehicles.add(v);
+				}				 
+				if(qName.equalsIgnoreCase("id")){
+					v.setVehicleID(tmpValue);
+				}
+				if(qName.equalsIgnoreCase("material")){
+					v.setFrameMaterial(tmpValue);
+				}
+				if (qName.equalsIgnoreCase("wheel")) {
+							
+					wlsub.add(w);
+				}
+				if (qName.equalsIgnoreCase("wheels")) {
+					v.getWheels().addAll(wlsub);	
+					wlsub.add(w);
+				}
+				/*if (qName.equalsIgnoreCase("material")) {
+					w.setMaterial(tmpValue);
+					System.out.println("wh");
+				}*/
+				if (qName.equalsIgnoreCase("position")) {
+					w.setPosition(tmpValue);
+					System.out.println("wh");
+				}	
+			}
+
+			public void characters(char ch[], int start, int length) throws SAXException {
+					tmpValue=new String(ch,start,length);
+
+			}
+
+		     };
+		     ClassLoader classLoader = this.getClass().getClassLoader();	   
+			   File configFile=new File(classLoader.getResource(fileName).getFile());	
+		       saxParser.parse(configFile, handler);
+		 
+		     } catch (Exception e) {
+		       e.printStackTrace();
+		     }
+		  
+	   }
+		
+
+
+		
+	
+
+
+
+	private void printReport() {
+		// TODO Auto-generated method stub
+		
+		for (Vehicle v  : vehicles) {
+			System.out.println(v.getVehicleID());
+			System.out.println(v.getFrameMaterial());
+			System.out.println(v.getPowerTrain());			
+			Set<Wheel> w=v.getWheels();
+			for (Wheel wheel : w) {
+				System.out.println(wheel.getMaterial());
+				System.out.println(wheel.getPosition());
+			}
+			
+		}
+		
+	}
+
+
+
+	 
+	
+}
